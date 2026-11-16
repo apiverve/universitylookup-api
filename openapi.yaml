@@ -1,0 +1,160 @@
+openapi: 3.0.4
+info:
+  title: University Lookup
+  description: >-
+    University Lookup is a university search and academic domain API covering
+    about 12,000 institutions worldwide. Search by name and country, or pass a
+    domain or email address to learn whether it belongs to a university, and for
+    US institutions get IPEDS details such as control, level and highest degree,
+    while paid plans add enrollment, admission rate and tuition.
+  termsOfService: https://apiverve.com/terms/
+  contact:
+    name: APIVerve Support
+    email: hello@apiverve.com
+    url: https://apiverve.com/contact
+  version: 1.0.0
+externalDocs:
+  description: Learn more about APIVerve
+  url: https://docs.apiverve.com?utm_source=openapi
+servers:
+  - url: https://api.apiverve.com/
+paths:
+  /v1/universitylookup:
+    get:
+      summary: University Lookup
+      description: >-
+        Search universities by name, country or state, or check whether a domain
+        or email address belongs to one
+      operationId: universitylookup
+      parameters:
+        - name: name
+          in: query
+          schema:
+            type: string
+          required: false
+          description: University name or words from it; US abbreviations match too
+          example: Stanford
+        - name: domain
+          in: query
+          schema:
+            type: string
+          required: false
+          description: >-
+            Domain to check, e.g. stanford.edu; subdomains match their
+            institution
+          example: stanford.edu
+        - name: email
+          in: query
+          schema:
+            type: string
+          required: false
+          description: Email address to check; its domain is used
+          example: jane@cs.stanford.edu
+        - name: country
+          in: query
+          schema:
+            type: string
+          required: false
+          description: Country name or two-letter code
+          example: US
+        - name: state
+          in: query
+          schema:
+            type: string
+          required: false
+          description: State or province (two-letter code in the US)
+          example: CA
+        - name: limit
+          in: query
+          schema:
+            type: integer
+          required: false
+          description: Maximum universities to return (1-50)
+          example: 10
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: status
+                  error:
+                    type: string
+                    description: error
+                  data:
+                    type: object
+                    description: data
+              example:
+                status: ok
+                error: null
+                data:
+                  domain: null
+                  isAcademicDomain: null
+                  matchType: null
+                  matchedDomain: null
+                  count: 1
+                  totalMatches: 1
+                  universities:
+                    - id: us-166683
+                      name: Massachusetts Institute of Technology
+                      aliases:
+                        - MIT
+                        - M.I.T.
+                      country: United States
+                      countryCode: US
+                      stateProvince: MA
+                      city: Cambridge
+                      address: 77 Massachusetts Avenue
+                      zip: 02139-4301
+                      latitude: 42.359243
+                      longitude: -71.093226
+                      timezone: America/New_York
+                      domains:
+                        - mit.edu
+                        - web.mit.edu
+                      website: https://web.mit.edu/
+                      phone: '6172531000'
+                      ipedsUnitId: 166683
+                      control: private_nonprofit
+                      level: four_year
+                      highestDegree: doctorate
+                      offersUndergraduate: true
+                      offersGraduate: true
+                      hbcu: false
+                      tribal: false
+                      landGrant: true
+                      locale: city_midsize
+                      sizeBand: '10000_19999'
+                      system: null
+                      stats:
+                        enrollmentTotal: 11920
+                        enrollmentUndergraduate: 4576
+                        enrollmentGraduate: 7344
+                        studentFacultyRatio: 3
+                        admissionRate: 5
+                        tuitionInDistrict: 60156
+                        tuitionInState: 60156
+                        tuitionOutOfState: 60156
+                        graduateTuitionInState: 59750
+                        graduateTuitionOutOfState: 59750
+                        roomAndBoard: 19390
+                        tuitionYear: 2023-24
+                        enrollmentYear: 2023
+        '401':
+          description: Your request was not authorized, or your API Key was invalid
+        '404':
+          description: Requested resource was not found
+        '500':
+          description: A server error has occurred, try again later
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: x-api-key
+      in: header
+security:
+  - api_key: []
